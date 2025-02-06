@@ -6,4 +6,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/apiminta/nevnapok/?nap={datum}',[NevnapController::class,'index']);
+Route::get('/apiminta/nevnapok/',[NevnapController::class,'index']);
