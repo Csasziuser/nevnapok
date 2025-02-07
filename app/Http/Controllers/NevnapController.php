@@ -16,6 +16,14 @@ class NevnapController extends Controller
             $nap = explode('-',$request->get('nap'))[1];
     
             $data = Nevnap::where('ho',$ho)->where('nap',$nap)->get();
+            if ($data->isEmpty()) 
+            {
+                Log::info("beléptem az if-be");
+                $response = response()->json(['message'=>'Nincs találat']);
+                $response->headers->set('Access-Control-Allow-Origin','*');
+                return $response;
+            }
+            Log::info($data);
             $response = response()->json($data);
             $response->headers->set('Access-Control-Allow-Origin','*');
     
@@ -25,12 +33,23 @@ class NevnapController extends Controller
         {
             $nev = $request->get('nev');
             $data = Nevnap::where('nev1', $nev)->orWhere('nev2', $nev)->get();
-
+            if (empty($data)) 
+            {
+                $response = response()->json(['message'=>'Nincs találat']);
+                $response->headers->set('Access-Control-Allow-Origin','*');
+                return $response;
+            }
             // setlocale(LC_ALL, "hu_HU.UTF8");
             // $data->ho = strftime("%m", mktime($data->ho));
             $response = response()->json($data);
             $response->headers->set('Access-Control-Allow-Origin','*');
     
+            return $response;
+        }
+        else 
+        {
+            $response = response()->json(['message'=>'Hibás paraméter']);
+            $response->headers->set('Access-Control-Allow-Origin','*');
             return $response;
         }
     }
